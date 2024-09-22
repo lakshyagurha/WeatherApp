@@ -5,33 +5,152 @@ import { useStateContext } from './Context'
 import { BackgroundLayout, WeatherCard, MiniCard } from './Components'
 import Weather from './Components/weather'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 function App() {
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [error, setError] = useState('');
   const navigate = useNavigate();
 
 
-  const handleLogin = (e) => {
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   if (email === 'demo@example.com' && password === 'password123') {
+  //     // Redirect to dashboard or home page
+  //     navigate('/weather');
+
+
+  //   } else {
+  //     setError('Invalid credentials. Please try again.');
+  //   }
+  // };
+
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email === 'demo@example.com' && password === 'password123') {
-      // Redirect to dashboard or home page
-      navigate('/weather');
+    setIsLoading(true);
+    setError('');
 
-
-    } else {
-      setError('Invalid credentials. Please try again.');
+    try {
+      if (isLogin) {
+        const response = await axios.post('http://localhost:5001/api/login', { email, password });
+        localStorage.setItem('token', response.data.token);
+        navigate('/weather');
+      } else {
+        const response = await axios.post('http://localhost:5001/api/signup', { email, password });
+        console.log('Signup response:', response);
+        setIsLogin(true);
+        setError('Signup successful. Please login.');
+      }
+    } catch (error) {
+      console.error('Error details:', error);
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response:', error.response.data);
+        console.error('Error status:', error.response.status);
+        setError(error.response.data.error || 'An error occurred. Please try again.');
+      } else if (error.request) {
+        // The request was made but no response was received
+        console.error('Error request:', error.request);
+        setError('No response from server. Please try again later.');
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', error.message);
+        setError('An unexpected error occurred. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
 
 
+
+
+
+
+
   return (
     <>
+
+<div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center p-4">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            {isLogin ? 'Welcome Back' : 'Create Account'}
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            {isLogin ? 'Sign in to your account' : 'Sign up for a new account'}
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
+
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Processing...' : (isLogin ? 'Sign in' : 'Sign up')}
+            </button>
+          </div>
+        </form>
+        <div className="text-center">
+          <button
+            onClick={() => setIsLogin(!isLogin)}
+            className="text-indigo-600 hover:text-indigo-500"
+          >
+            {isLogin ? 'Need an account? Sign up' : 'Already have an account? Sign in'}
+          </button>
+        </div>
+      </div>
+    </div>
+
+
     
-        <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center p-4">
+        {/* <div className="min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500 flex items-center justify-center p-4">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -163,7 +282,7 @@ function App() {
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
 
 
 
