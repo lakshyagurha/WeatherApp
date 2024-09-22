@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import { StateContextProvider } from './Context/index.jsx'
-import NewCompo from './Components/NewCompo.jsx'
+import NewCompo from './Components/NewCompo'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
