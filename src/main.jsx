@@ -4,8 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import App from './App.jsx'
 import './index.css'
 import { StateContextProvider } from './Context/index.jsx'
-import WeatherCard from './Components/WeatherCard.jsx'
-import Weather from './Components/weather.jsx'
+import NewCompo from './Components/NewCompo.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -13,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Router>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/weather" element={<Weather/>} />
+          <Route path="/weather" element={<NewCompo/>} />
         </Routes>
       </Router>
     </StateContextProvider>

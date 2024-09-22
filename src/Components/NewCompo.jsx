@@ -4,7 +4,7 @@ import search from '../assets/icons/search.svg'
 import { useStateContext } from '../Context'
 import { BackgroundLayout, WeatherCard, MiniCard } from '.'
 
-function weather() {
+function NewCompo() {
 
   const [input, setInput] = useState('')
   const { weather, thisLocation, values, place, setPlace } = useStateContext()
@@ -64,4 +64,4 @@ function weather() {
   )
 }
 
-export default weather
+export default NewCompo
