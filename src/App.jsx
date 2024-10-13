@@ -42,11 +42,11 @@ function App() {
 
     try {
       if (isLogin) {
-        const response = await axios.post('https://newweatherapp-api.onrender.com/api/login', { email, password });
+        const response = await axios.post('http://localhost:5001/api/login', { email, password });
         localStorage.setItem('token', response.data.token);
         navigate('/weather');
       } else {
-        const response = await axios.post('https://newweatherapp-api.onrender.com/api/signup', { email, password });
+        const response = await axios.post('http://localhost:5001/api/signup', { email, password });
         console.log('Signup response:', response);
         setIsLogin(true);
         setError('Signup successful. Please login.');
